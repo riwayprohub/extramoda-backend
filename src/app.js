@@ -11,7 +11,22 @@ import {
 
 const app = express()
 
-app.use(cors({ origin: config.clientUrl, credentials: true }))
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://riwayprohub.github.io"
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS no permitido"));
+    }
+  },
+  credentials: true
+}))
 app.use(express.json())
 app.use(morgan("dev"))
 
