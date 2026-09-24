@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CatalogoItem {
+  id          Int      @id @default(autoincrement())
+  code        String   @unique
+  name        String
+  price       Decimal  @db.Decimal(10, 2)
+  category    String
+  badge       String   @default("") // "new" | "oferta" | "" (vacío = sin etiqueta)
+  description String?  @db.Text
+  images      Json
+  stock       Int      @default(999)
+  featured    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Imágenes del fondo del Home (hero). Máximo 3, se muestran en rotación
+// sobre el fondo negro de HomeView.
+model HeroImage {
+  id        Int      @id @default(autoincrement())
+  image     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
